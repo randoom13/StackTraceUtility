@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!-- Multi-target frameworks -->
+    <TargetFrameworks>net40;netcoreapp3.1;net5.0;net4.5;</TargetFrameworks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="IMarkerObjectsHolder.cs~RF2e771451.TMP" />
+  </ItemGroup>
+
+  <!-- Add any additional dependencies here if needed -->
+
+</Project>
