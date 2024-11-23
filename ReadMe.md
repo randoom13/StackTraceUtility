@@ -1,28 +1,39 @@
- ﻿In modern projects, there are often many moving parts. Smart logging in  
+In modern projects, there are often many moving parts. Smart logging in  
   long-established projects can significantly simplify a developer's work.  
   If you have many instances of a single type and it's important for you  
   to identify precisely all of them and log information about any one of  
   them, this library can be useful.  
+
  This library helps you add markers to the stack trace by generating  
- methods above a block or method.
+ methods above a block or method.  
+
+```xml
+RELEASE
+         Void DoSomething()
+  =>     Void Marker_0(System.Action)
+         Void Main(System.String[])
+``` 
   The generated method names will be in the following format:  
-<Marker_<tag>_[Number]>  
-<Marker_<tag>_[Parent__Number]_[Number]>  
-p/s This library cannot cause memory leaks because it stores all required  
-information using weak references
+```<Marker_<tag>_[Number]>```  
+```<Marker_<tag>_[Parent__Number]_[Number]>```
+
+P.S. No need to worry about memory leaks because the library stores all  
+required information using weak references. The method will be generated  
+once on the first call to BuildMarker for a particular instance and saved  
+in the cache to improve performance.
 
  To associate a class instance with a generated method name in the format  
- <Marker_<tag>_|Number|>, use 
-string Register(object target) / Task<string> RegisterAsync(object target)
+ ```<Marker_<tag>_|Number|>```, use 
+string Register(object target) / Task<string> RegisterAsync(object target)  
 (The method returns the future method name)
 
  To associate a class instance with a generated method name in the format  
- <Marker_<tag>_|Parent__Number|_|Number|>, use:  
-IEnumerable<string> Register(object parent, IEnumerable<object> children) / Task<IEnumerable<string>> RegisterAsync(object parent, IEnumerable<object> children)
+ ```<Marker_<tag>_|Parent__Number|_|Number|>```, use:  
+IEnumerable<string> Register(object parent, IEnumerable<object> children) / Task<IEnumerable<string>> RegisterAsync(object parent, IEnumerable<object> children)  
 (The method returns the future method names)
 
  You can apply this marking to a block or method by calling:  
-void BuildMarker(object target, Action action) / Task BuildMarkerAsync(object target, Action action)
+void BuildMarker(object target, Action action) / Task BuildMarkerAsync(object target, Action action)  
 The body of the block or method should be inside the action.
 
 Example
@@ -83,22 +94,22 @@ DEBUG
         Void Invoke()
         Void Main(System.String[])
 ```
-By default, StackTraceMarker works online (IsOnline = true). You can turn  
+ By default, StackTraceMarker works online (IsOnline = true). You can turn  
 it off using the TurnOff() method and turn it back on with TurnOn().
 
-When turned off (and if ApplyOffCache = true, which is the default),  
+ When turned off (and if ApplyOffCache = true, which is the default),  
 StackTraceMarker collects registered items in a cache (a linked list). When  
 StackTraceMarker is turned back on (and if ApplyOffCache remains true), the  
 items from the cache are delivered to the internal holder.
 
-You can choose from three options for the internal holder:
+ You can choose from three options for the internal holder:
 
-SimpleObjectsHolder – A simple and obvious choice with no concern for cleaning,  
+ SimpleObjectsHolder – A simple and obvious choice with no concern for cleaning,  
 as it uses a ConditionalWeakTable.
 
-BTreeObjectsHolder – You need to manage cleaning the dictionary when a registered  
+ BTreeObjectsHolder – You need to manage cleaning the dictionary when a registered  
 instance is garbage collected. This can be done using IStackTraceMarker.Clean() or  
 by calling IStackTraceMarker.BuildMarker() with BaseBTreeObjectsHolder.ApplyCleanupOnBuild = true.
 
-AdvancedBTreeObjectsHolder – An extension of BTreeObjectsHolder, which includes a mechanism  
+ AdvancedBTreeObjectsHolder – An extension of BTreeObjectsHolder, which includes a mechanism  
 that triggers IStackTraceMarker.Clean() when a registered item is garbage collected.
