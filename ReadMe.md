@@ -3,7 +3,7 @@ Smart logging in long-established projects can significantly
 simplify a developer's work. If you have many instances of a  
 single type and it's important for you to identify all of  
 them and log information about any one of them, this  
-library can be useful. 
+library can be useful.  
 This library helps you add markers to the stack trace by  
 generating methods above a block or method.  
 The generated method names will be in the following format:  
