@@ -1,4 +1,4 @@
-https://www.nuget.org/packages/StackTraceMarker
+https://www.nuget.org/packages/StackTraceMarker  
 In modern projects, there are often many moving parts. Smart logging in  
   long-established projects can significantly simplify a developer's work.  
   If you have many instances of a single type and it's important for you  
